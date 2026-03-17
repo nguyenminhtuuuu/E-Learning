@@ -1,6 +1,6 @@
 # Báo cáo Tuần 3
 **Tuần:** 3 (09/03/2026 - 15/03/2026)
-**Nhóm:** 06
+**Nhóm:** 03
 **Đề tài:** D1 - Hệ thống học trực tuyến (E-Learning)
 **Nhóm trưởng:** Nguyễn Minh Tú - 2351010235
 ---
