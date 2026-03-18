@@ -114,7 +114,45 @@ def login_admin_process():
         err_msg = "Tài khoản hoặc mật khẩu không đúng!"
 
 
+# làm quiz
+@app.route("/quiz/<int:khoahoc_id>", methods=['get', 'post'])
+@login_required
+def quiz(khoahoc_id):
+    questions = dao.get_question_by_maKH(khoahoc_id)
+    score = 0
+    total = len(questions)
+    result_score = 0
+    show_results = False
 
+    user_answer_id = {} # dictionary
+
+    if request.method.__eq__("POST"):
+        show_results = True
+        for q in questions:
+            ans = request.form.get(f'q_{q.id}')
+
+            if ans:
+                user_answer_id[q.id] = ans # { question_id : answer_id}
+            correct_answer = dao.get_correct_answer(q.id)
+            if ans and int(ans) == correct_answer.id:
+                score += 1
+
+        result_score = (score/total) * 10 if total > 0 else 0
+
+    return render_template('quiz.html', questions=questions, result_score=result_score, score=score, total=total, show_results=show_results, user_answer_id=user_answer_id,khoahoc_id=khoahoc_id)
+
+
+
+# # xem tiến độ học
+# @app.route('/progress', methods=['get', 'post'])
+# def progress():
+#     return render_template('progress.html')
+#
+#
+# # cấp chứng chỉ
+# @app.route('certificate', methods=['get', 'post'])
+# def certificate():
+#     return render_template('certificate.html')
 
 
 if __name__ == '__main__':

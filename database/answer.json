@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1 ,
+    "answer": "Where is the nearest bus stop?" ,
+    "is_correct": true ,
+    "question_id": 1
+  },
+  {
+    "id": 2 ,
+    "answer": "How much is this?" ,
+    "is_correct": false ,
+    "question_id": 1
+  },
+  {
+    "id": 3 ,
+    "answer": "Can I have the menu?" ,
+    "is_correct": false ,
+    "question_id": 1
+  },
+  {
+    "id": 4 ,
+    "answer": "What time is it?" ,
+    "is_correct": false ,
+    "question_id": 1
+  }
+]

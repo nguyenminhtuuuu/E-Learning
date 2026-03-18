@@ -42,6 +42,20 @@ class Khoahoc(Base):
     hocPhi = Column(Integer, nullable=False)
     image = Column(String(300), default='https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041156/daily_conversational_english_p81vyi.png')
     description = Column(String(300))
+    questions = relationship('Question', backref="Khoahoc", lazy=True)
+
+class Question(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    content = Column(String(500), nullable=False)
+    khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
+    answers = relationship('Answer', backref="Question", lazy=True)
+
+
+class Answer(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    answer = Column(String(500), nullable=False)
+    is_correct = Column(Boolean, nullable=False)
+    question_id = Column(Integer, ForeignKey(Question.id), nullable=False)
 
 
 
@@ -53,28 +67,44 @@ if __name__ == "__main__":
         c2 = Capdo(name="Intermediate")
         c3 = Capdo(name="Advanced")
         db.session.add_all([c1, c2, c3])
+        db.session.commit()
 
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        json_path = os.path.join(BASE_DIR, 'database', 'khoahoc.json')
+        json_path = os.path.join(BASE_DIR, 'database')
 
-        with open(json_path, encoding="utf-8") as f:
+
+        # with open(json_path, encoding="utf-8") as f:
+        #     khoahoc = json.load(f)
+        #
+        #     for k in khoahoc:
+        #         db.session.add(Khoahoc(**k))
+        #
+        #     db.session.commit()
+
+        with open(os.path.join(json_path, 'khoahoc.json'), encoding="utf-8") as f:
             khoahoc = json.load(f)
-
             for k in khoahoc:
                 db.session.add(Khoahoc(**k))
+            db.session.commit()
 
+        with open(os.path.join(json_path, 'question.json'), encoding="utf-8") as f:
+            question = json.load(f)
+            for q in question:
+                # Đảm bảo trong file json có "id", "content", "khoahoc_id"
+                db.session.add(Question(**q))
             db.session.commit()
 
 
+
+        with open(os.path.join(json_path, 'answer.json'), encoding="utf-8") as f:
+            answer = json.load(f)
+            for a in answer:
+                db.session.add(Answer(**a))
+            db.session.commit()
+
+
+
         import hashlib
-
-        # Tạo user mẫu
-        u1 = User(name="Admin", username="admin",
-          password=str(hashlib.md5("123".encode("utf-8")).hexdigest()), email ="admin@gmail.com", role=UserEnum.ADMIN)
-        u2 = User(name="User", username="user",
-          password=str(hashlib.md5("123".encode("utf-8")).hexdigest()), email ="user@gmail.com", role=UserEnum.USER)
-        u3 = User(name="TEACHER", username="teacher",
-          password=str(hashlib.md5("123".encode("utf-8")).hexdigest()), email ="teacher@gmail.com", role=UserEnum.TEACHER)
-
-        db.session.add_all([u1,u2,u3])
+        u1 = User(name="Admin", username="admin", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()), email ="admin@gmail.com", role=UserEnum.ADMIN)
+        db.session.add_all([u1])
         db.session.commit()

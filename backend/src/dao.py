@@ -1,9 +1,11 @@
 import email
 import json
 import hashlib
+
+from click import Choice
 from sqlalchemy import func, extract, case
 from backend.src import db, app
-from backend.src.models import (Capdo, Khoahoc, User)
+from backend.src.models import (Capdo, Khoahoc, User, Question, Answer)
 UserEnum = User.role.type.enum_class
 
 
@@ -89,6 +91,12 @@ def count_khoahoc_by_capdo():
     return query.all()
 
 
+# xu ly quiz
+def get_question_by_maKH(id):
+    return Question.query.filter(Question.khoahoc_id == id).all()
+
+def get_correct_answer(id):
+    return Answer.query.filter_by(question_id=id, is_correct=True).first()
 
 
 
