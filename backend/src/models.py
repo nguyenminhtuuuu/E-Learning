@@ -57,7 +57,16 @@ class Answer(db.Model):
     is_correct = Column(Boolean, nullable=False)
     question_id = Column(Integer, ForeignKey(Question.id), nullable=False)
 
+class Progress(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
 
+    # lession_id = Column(Integer, ForeignKey(Lesson.id), nullable=True)
+
+    is_completed = Column(Boolean, default=False)
+    score = Column(Float, nullable=True)
+    date = Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
 if __name__ == "__main__":
     with app.app_context():
@@ -72,14 +81,6 @@ if __name__ == "__main__":
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         json_path = os.path.join(BASE_DIR, 'database')
 
-
-        # with open(json_path, encoding="utf-8") as f:
-        #     khoahoc = json.load(f)
-        #
-        #     for k in khoahoc:
-        #         db.session.add(Khoahoc(**k))
-        #
-        #     db.session.commit()
 
         with open(os.path.join(json_path, 'khoahoc.json'), encoding="utf-8") as f:
             khoahoc = json.load(f)

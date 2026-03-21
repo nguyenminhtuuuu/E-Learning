@@ -84,8 +84,15 @@ def register():
             try:
                 dao.add_user(name, username, password, email, avatar=path_file)
                 return redirect('/login')
-            except:
+            # except:
+            #     db.session.rollback()
+            #     err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
+
+            except Exception as e:
                 db.session.rollback()
+                print("--- LỖI SQL THỰC SỰ ---")
+                print(e)  # Tú nhìn vào màn hình PyCharm/Terminal sẽ thấy lỗi này
+                print("-----------------------")
                 err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
 
 
@@ -139,16 +146,21 @@ def quiz(khoahoc_id):
 
         result_score = (score/total) * 10 if total > 0 else 0
 
+        if result_score >= 5:
+            dao.get_user_progress(user_id=current_user.id, khoahoc_id=khoahoc_id, score=result_score)
+
     return render_template('quiz.html', questions=questions, result_score=result_score, score=score, total=total, show_results=show_results, user_answer_id=user_answer_id,khoahoc_id=khoahoc_id)
 
 
 
-# # xem tiến độ học
-# @app.route('/progress', methods=['get', 'post'])
-# def progress():
-#     return render_template('progress.html')
-#
-#
+# xem tiến độ học
+@app.route('/progress', methods=['get', 'post'])
+@login_required
+def progress():
+    progress = dao.get_user_progress(current_user.id)
+    return render_template('progress.html', progress_data=progress)
+
+
 # # cấp chứng chỉ
 # @app.route('certificate', methods=['get', 'post'])
 # def certificate():

@@ -1,36 +1,20 @@
-import email
+
 import json
 import hashlib
 
 from click import Choice
 from sqlalchemy import func, extract, case
 from backend.src import db, app
-from backend.src.models import (Capdo, Khoahoc, User, Question, Answer)
+from backend.src.models import (Capdo, Khoahoc, User, Question, Answer, Progress)
 UserEnum = User.role.type.enum_class
 
 
 
 def load_capdo():
-    # with open("data/capdo.json", encoding="utf-8") as f:
-    #      return json.load(f)
     return Capdo.query.all()
 
 def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
-    # with open("data/khoahoc.json", encoding="utf-8") as f:
-    #     khoahoc = json.load(f)
-    #
-    #     if q:
-    #         #xử lý để không phân biệt hoa/thường
-    #         q = q.lower()
-    #         khoahoc = [k for k in khoahoc if q in k["name"].lower()]
-    #
-    #     if id:
-    #         khoahoc = [k for k in khoahoc if k["id"].__eq__(int(id))]
-    #
-    #     return khoahoc
-
     query = Khoahoc.query
-
     if q:
         query = query.filter(Khoahoc.name.contains(q))
 
@@ -39,41 +23,32 @@ def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
 
     if capDo_id:
         query = query.filter(Khoahoc.capDo_id == int(capDo_id))
-
     if page:
         size = app.config["PAGE_SIZE"]
         start = (int(page)-1)*size
         end = start + size
         query = query.slice(start, end)
-
     return query.all()
 
 
 
 
-def add_user(name,username, password, avatar):
+def add_user(name,username, password, email, avatar):
     password = hashlib.md5(password.strip().encode("utf-8")).hexdigest()
-    u = User(name=name, username=username.strip(), password=password, email=email.strip(),avatar=avatar)
+    u = User(name=name, username=username.strip(), password=password, email=email.strip() if email else "",avatar=avatar)
     db.session.add(u)
     db.session.commit()
 
 
 
 def get_khoahoc_by_maKH(id):
-    # with open("data/khoahoc.json", encoding="utf-8") as f:
-    #     khoahoc = json.load(f)
-    #
-    #     for k in khoahoc:
-    #         if k["id"].__eq__(id):
-    #             return k
-
     return Khoahoc.query.get(id)
 
 
 
 def auth_user(username, password):
     password= str(hashlib.md5(password.encode('utf-8')).hexdigest())
-    return User.query.filter(User.username.__eq__(username)and User.password.__eq__(password)).first()
+    return User.query.filter(User.username.__eq__(username), User.password.__eq__(password)).first()
 
 
 def get_user_by_id(id):
@@ -85,9 +60,6 @@ def count_khoahoc():
 
 def count_khoahoc_by_capdo():
     query = db.session.query(Capdo.id, Capdo.name, func.count(Khoahoc.id)).join(Khoahoc, Khoahoc.capDo_id.__eq__(Capdo.id), isouter=True).group_by(Capdo.id)
-
-    #print(query)
-
     return query.all()
 
 
@@ -98,7 +70,30 @@ def get_question_by_maKH(id):
 def get_correct_answer(id):
     return Answer.query.filter_by(question_id=id, is_correct=True).first()
 
+# xu ly tien do hoc
+def get_user_progress(id):
+    courses = Khoahoc.query.all()
+    progress = []
 
+    for c in courses:
+        # tong so luong bai hoc va bai quiz
+        # total_lessons = len(c.lessons)
+        # moi khoa se co 1 bai quiz
+        # total = total_lessons +1
+
+        # count = Progress.query.filter_by(user_id=c.user_id, khoahoc_id=c.id, is_completed = True).count()
+        #
+        # percent = int((count/total)*100) if total > 0 else 0
+        #
+        # progress.append({
+        #     'course_id' : c.id,
+        #     'course_name' : c.name,
+        #     'percent' : percent,
+        #     'complete' : count,
+        #     'total' : total
+        # })
+
+        return progress
 
 if __name__ == '__main__':
     with app.app_context():
