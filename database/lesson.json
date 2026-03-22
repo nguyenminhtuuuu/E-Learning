@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "Giới thiệu khóa học",
+    "content": "Trong bài học này bạn sẽ được giới thiệu tổng quan về khóa học.",
+    "video_url": "",
+    "khoahoc_id": 2
+  },
+  {
+    "id": 2,
+    "title": "Chào hỏi cơ bản",
+    "content": "Học cách chào hỏi trong tiếng Anh giao tiếp hằng ngày.",
+    "video_url": "https://www.youtube.com/embed/aVISwvbfdsE",
+    "khoahoc_id": 1
+  },
+  {
+    "id": 3,
+    "title": "Giới thiệu bản thân",
+    "content": "Cách giới thiệu tên, tuổi và nghề nghiệp bằng tiếng Anh.",
+    "video_url": "",
+    "khoahoc_id": 1
+  }
+]

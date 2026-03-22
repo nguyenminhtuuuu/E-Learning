@@ -4,7 +4,8 @@ from flask import render_template, request, redirect, flash, url_for, jsonify
 import math
 from flask_login import login_user, current_user, logout_user, login_required
 import cloudinary.uploader
-from backend.src import dao, db, login, app
+from backend.src import dao, db, login, app, admin
+from backend.src.models import Enrollment
 
 
 @app.route('/')
@@ -18,7 +19,8 @@ def index():
         message = f"Không tìm thấy khóa học! Vui lòng tìm kiếm khóa học khác!"
     pages = math.ceil(dao.count_khoahoc()/app.config["PAGE_SIZE"])
 
-    return render_template('index.html', khoahoc=khoahoc, message=message, pages=pages)
+    registered_id = dao.get_registered_id(current_user)
+    return render_template('index.html', khoahoc=khoahoc, message=message, pages=pages, registered_id=registered_id)
 
 
 
@@ -35,8 +37,13 @@ def login_my_user():
 
         user = dao.auth_user(username, password)
 
+        print(user.password)
+
         if user:
             login_user(user)
+            if user.role.name == 'ADMIN':
+                return redirect(url_for('admin.index'))
+
             return redirect('/')
         else:
             flash("Tài khoản hoặc mật khẩu không đúng!", "danger")
@@ -99,27 +106,51 @@ def register():
     return render_template("register.html", err_msg=err_msg)
 
 
-
-
 @login.user_loader
 def get_user(user_id):
     return dao.get_user_by_id(user_id)
 
 
-@app.route("/admin-login", methods=["post"])
+@app.route("/admin")
 def login_admin_process():
-    username = request.form.get("username")
-    password = request.form.get("password")
+        return redirect(url_for('admin.index'))
 
-    user = dao.auth_user(username, password)
+# Lesson
 
-    if user:
-        login_user(user)
-        return redirect("/admin")
+@app.route('/lesson/<int:khoahoc_id>')
+def lesson(khoahoc_id):
+    lessons = dao.get_lesson_by_khoahoc(khoahoc_id)
+    message = None
+    if not lessons:
+        message = f"Khóa học chưa có bài học!"
+    khoahoc = dao.get_khoahoc_by_id(khoahoc_id)
+    return render_template('lesson.html', lessons=lessons, khoahoc=khoahoc, message=message)
 
-    else:
-        err_msg = "Tài khoản hoặc mật khẩu không đúng!"
+@app.route('/lesson_detail/<int:lesson_id>')
+@login_required
+def lesson_detail(lesson_id):
+    is_registered = False
+    lesson = dao.get_lesson_by_id(lesson_id)
+    register = dao.get_registered_id(current_user)
+    if lesson.khoahoc_id in register:
+       is_registered =  True
+    message = f"Bạn chưa đăng ký khóa học này!!"
+    return render_template('lesson_detail.html', lesson=lesson, is_registered=is_registered, message=message)
 
+@app.route('/dangky/<int:khoahoc_id>')
+@login_required
+def dangky(khoahoc_id):
+    e = Enrollment.query.filter_by(user_id=current_user.id, khoahoc_id=khoahoc_id).first()
+
+    if not e:
+        e = Enrollment(
+            user_id=current_user.id,
+            khoahoc_id=khoahoc_id
+        )
+        db.session.add(e)
+        db.session.commit()
+
+    return redirect(url_for('index'))
 
 # làm quiz
 @app.route("/quiz/<int:khoahoc_id>", methods=['get', 'post'])
@@ -165,6 +196,7 @@ def progress():
 # @app.route('certificate', methods=['get', 'post'])
 # def certificate():
 #     return render_template('certificate.html')
+
 
 
 if __name__ == '__main__':

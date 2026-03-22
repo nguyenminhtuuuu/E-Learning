@@ -1,17 +1,18 @@
 
 import json
 import hashlib
-
 from click import Choice
 from sqlalchemy import func, extract, case
 from backend.src import db, app
-from backend.src.models import (Capdo, Khoahoc, User, Question, Answer, Progress)
+from backend.src.models import (Capdo, Khoahoc, User, Question, Answer, Progress, Lesson)
 UserEnum = User.role.type.enum_class
 
 
 
 def load_capdo():
     return Capdo.query.all()
+
+#Khóa học
 
 def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
     query = Khoahoc.query
@@ -23,6 +24,7 @@ def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
 
     if capDo_id:
         query = query.filter(Khoahoc.capDo_id == int(capDo_id))
+
     if page:
         size = app.config["PAGE_SIZE"]
         start = (int(page)-1)*size
@@ -30,7 +32,23 @@ def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
         query = query.slice(start, end)
     return query.all()
 
+def get_khoahoc_by_id(id: None):
+    return Khoahoc.query.filter(Khoahoc.id==id).first()
 
+def get_registered_id(user):
+    registered_id = []
+    if user.is_authenticated:
+        for e in user.enrollments:
+            registered_id.append(e.khoahoc_id)
+    return registered_id
+
+# Lesson
+
+def get_lesson_by_khoahoc(id: None):
+    return Lesson.query.filter(Lesson.khoahoc_id==id).all()
+
+def get_lesson_by_id(id: None):
+    return Lesson.query.filter(Lesson.id==id).first()
 
 
 def add_user(name,username, password, email, avatar):

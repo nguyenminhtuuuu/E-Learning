@@ -1,0 +1,22 @@
+{%extends 'layout/base.html'%}
+{%block title%}Bài học{%endblock%}
+{%block content%}
+{% if message %}
+    <p style="color:red; font-weight:bold;">{{message}}</p>
+{% else %}
+<h3 class="text-primary text-center md-3">Các bài học của khóa "{{khoahoc.name}}"</h3>
+<div class="list-group">
+{% for l in lessons %}
+<a href="/lesson_detail/{{l.id}}" class="list-group-item d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+        <div class="me-3 text-danger fs-4">📄</div>
+        <div>
+            <div class="fw-bold">{{ l.title }}</div>
+            <small class="text-muted">Bài học ID: {{loop.index}}</small>
+        </div>
+    </div>
+</a>
+{%endfor%}
+</div>
+{% endif %}
+{%endblock%}
