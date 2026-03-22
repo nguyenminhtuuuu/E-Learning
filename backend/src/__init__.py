@@ -54,6 +54,9 @@ def create_app():
     db.init_app(app)
     login.init_app(app)
 
+    #7. Khi login_required thì chuyển sang trang login
+    login.login_view = 'login_my_user'
+
     return app
 
 app = create_app()

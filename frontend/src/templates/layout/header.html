@@ -18,10 +18,17 @@
 
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
+                    {% if current_user.role.name == 'ADMIN'%}
+                    <a class="nav-link active" href="/admin">
+                        <img src="{{current_user.avatar}}" width="20">
+                        Chào {{current_user.name}}
+                    </a>
+                    {%else%}
                     <a class="nav-link active" href="/login">
                         <img src="{{current_user.avatar}}" width="20">
                         Chào {{current_user.name}}
                     </a>
+                    {%endif%}
 
                 <li class="nav-item">
                     <a class="nav-link active" href="/logout">&#128220Đăng xuất</a>
