@@ -1,6 +1,7 @@
 {%extends 'layout/base.html'%}
 {%block title%}Bài học{%endblock%}
 {%block content%}
+{% if is_registered %}
 {% if message %}
     <p style="color:red; font-weight:bold;">{{message}}</p>
 {% else %}
@@ -17,6 +18,16 @@
     </div>
 </a>
 {%endfor%}
+
 </div>
 {% endif %}
+<a class="btn btn-warning fw-bold text-white shadow-sm" href="/quiz/{{ khoahoc.id }}">
+    📝 Làm bài Quiz tổng hợp
+</a>
+{% else %}
+<a class="btn btn-danger fw-bold" href="{{ url_for('dangky', khoahoc_id=khoahoc.id) }}">
+    Đăng ký để học và làm bài tập
+</a>
+{% endif %}
+
 {%endblock%}

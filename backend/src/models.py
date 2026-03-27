@@ -37,24 +37,30 @@ class User(Base, UserMixin):
 class Capdo(Base):
     khoahocs = relationship('Khoahoc', backref="Capdo", lazy=True)
 
-
 class Khoahoc(Base):
     capDo_id = Column(Integer, ForeignKey(Capdo.id), nullable=False)
     hocPhi = Column(Integer, nullable=False)
     image = Column(String(300),
                    default='https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041156/daily_conversational_english_p81vyi.png')
     description = Column(String(300))
-    questions = relationship('Question', backref="Khoahoc", lazy=True)
+    questions = relationship('Question', backref="khoahoc", lazy=True)
     lessons = relationship('Lesson', backref='khoahoc')
     enrollments = relationship('Enrollment', backref='khoahoc_enroll', lazy=True)
+
+class Lesson(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String(200), nullable=False)
+    content = Column(Text)
+    video_url = Column(String(300))
+    khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
 
 
 class Question(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     content = Column(String(500), nullable=False)
     khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
-    answers = relationship('Answer', backref="Question", lazy=True, cascade="all, delete-orphan")
-
+    lesson_id = Column(Integer, ForeignKey(Lesson.id), nullable=False)
+    answers = relationship('Answer', backref="question", lazy=True, cascade="all, delete-orphan")
 
 class Answer(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -68,19 +74,12 @@ class Progress(db.Model):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
 
-    # lession_id = Column(Integer, ForeignKey(Lesson.id), nullable=True)
+    lesson_id = Column(Integer, ForeignKey(Lesson.id), nullable=True)
 
     is_completed = Column(Boolean, default=False)
     score = Column(Float, nullable=True)
     date = Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
 
-
-class Lesson(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String(200), nullable=False)
-    content = Column(Text)
-    video_url = Column(String(300))
-    khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
 
 
 class Enrollment(db.Model):
@@ -109,10 +108,15 @@ if __name__ == "__main__":
                 db.session.add(Khoahoc(**k))
             db.session.commit()
 
+        with open(os.path.join(json_path, 'lesson.json'), encoding="utf-8") as f:
+            lesson = json.load(f)
+            for l in lesson:
+                db.session.add(Lesson(**l))
+            db.session.commit()
+
         with open(os.path.join(json_path, 'question.json'), encoding="utf-8") as f:
             question = json.load(f)
             for q in question:
-                # Đảm bảo trong file json có "id", "content", "khoahoc_id"
                 db.session.add(Question(**q))
             db.session.commit()
 
@@ -122,11 +126,7 @@ if __name__ == "__main__":
                 db.session.add(Answer(**a))
             db.session.commit()
 
-        with open(os.path.join(json_path, 'lesson.json'), encoding="utf-8") as f:
-            lesson = json.load(f)
-            for l in lesson:
-                db.session.add(Lesson(**l))
-            db.session.commit()
+
 
         import hashlib
 

@@ -1,26 +1,76 @@
 [
-  {
-    "id": 1 ,
-    "answer": "Where is the nearest bus stop?" ,
-    "is_correct": true ,
-    "question_id": 1
-  },
-  {
-    "id": 2 ,
-    "answer": "How much is this?" ,
-    "is_correct": false ,
-    "question_id": 1
-  },
-  {
-    "id": 3 ,
-    "answer": "Can I have the menu?" ,
-    "is_correct": false ,
-    "question_id": 1
-  },
-  {
-    "id": 4 ,
-    "answer": "What time is it?" ,
-    "is_correct": false ,
-    "question_id": 1
-  }
+  {"id": 1, "answer": "To improve academic and professional writing skills.", "is_correct": true, "question_id": 1},
+  {"id": 2, "answer": "To learn how to cook professional meals.", "is_correct": false, "question_id": 1},
+
+  {"id": 3, "answer": "Five steps: Prewriting, Drafting, Revising, Editing, and Publishing.", "is_correct": true, "question_id": 2},
+  {"id": 4, "answer": "Only one step: just start typing.", "is_correct": false, "question_id": 2},
+
+  {"id": 5, "answer": "No, they have different purposes, styles, and audiences.", "is_correct": true, "question_id": 3},
+  {"id": 6, "answer": "Yes, all writing is exactly the same.", "is_correct": false, "question_id": 3},
+
+  {"id": 7, "answer": "Research the topic and create an outline.", "is_correct": true, "question_id": 4},
+  {"id": 8, "answer": "Write the conclusion first.", "is_correct": false, "question_id": 4},
+
+  {"id": 9, "answer": "Students and professionals looking to improve their writing.", "is_correct": true, "question_id": 5},
+  {"id": 10, "answer": "Professional athletes only.", "is_correct": false, "question_id": 5},
+
+  {"id": 11, "answer": "Good morning.", "is_correct": true, "question_id": 6},
+  {"id": 12, "answer": "Good evening.", "is_correct": false, "question_id": 6},
+
+  {"id": 13, "answer": "Good morning/afternoon/evening.", "is_correct": true, "question_id": 7},
+  {"id": 14, "answer": "What's up!", "is_correct": false, "question_id": 7},
+
+  {"id": 15, "answer": "How do you do?", "is_correct": true, "question_id": 8},
+  {"id": 16, "answer": "I am fine, thank you.", "is_correct": false, "question_id": 8},
+
+  {"id": 17, "answer": "Hi! / Hey!", "is_correct": true, "question_id": 9},
+  {"id": 18, "answer": "Dear Sir/Madam.", "is_correct": false, "question_id": 9},
+
+  {"id": 19, "answer": "After 6:00 PM.", "is_correct": true, "question_id": 10},
+  {"id": 20, "answer": "At 8:00 AM.", "is_correct": false, "question_id": 10},
+
+  {"id": 21, "answer": "What is your name?", "is_correct": true, "question_id": 11},
+  {"id": 22, "answer": "How old are you?", "is_correct": false, "question_id": 11},
+
+  {"id": 23, "answer": "I am [number] years old.", "is_correct": true, "question_id": 12},
+  {"id": 24, "answer": "My age is tall.", "is_correct": false, "question_id": 12},
+
+  {"id": 25, "answer": "I work as a [job title].", "is_correct": true, "question_id": 13},
+  {"id": 26, "answer": "I like my job.", "is_correct": false, "question_id": 13},
+
+  {"id": 27, "answer": "Nice to meet you.", "is_correct": true, "question_id": 14},
+  {"id": 28, "answer": "Goodbye.", "is_correct": false, "question_id": 14},
+
+  {"id": 29, "answer": "I am from...", "is_correct": true, "question_id": 15},
+  {"id": 30, "answer": "I go to...", "is_correct": false, "question_id": 15},
+
+  {"id": 31, "answer": "Three main parts: Introduction, Body, and Conclusion.", "is_correct": true, "question_id": 16},
+  {"id": 32, "answer": "Only one long paragraph.", "is_correct": false, "question_id": 16},
+
+  {"id": 33, "answer": "At the end of the introduction.", "is_correct": true, "question_id": 17},
+  {"id": 34, "answer": "In the middle of a body paragraph.", "is_correct": false, "question_id": 17},
+
+  {"id": 35, "answer": "To summarize the main points and restate the thesis.", "is_correct": true, "question_id": 18},
+  {"id": 36, "answer": "To introduce new information.", "is_correct": false, "question_id": 18},
+
+  {"id": 37, "answer": "Usually three body paragraphs.", "is_correct": true, "question_id": 19},
+  {"id": 38, "answer": "At least ten paragraphs.", "is_correct": false, "question_id": 19},
+
+  {"id": 39, "answer": "An opening sentence designed to grab the reader's attention.", "is_correct": true, "question_id": 20},
+  {"id": 40, "answer": "A tool used for fishing.", "is_correct": false, "question_id": 20},
+
+  {"id": 41, "answer": "How much does this cost?", "is_correct": true, "question_id": 21},
+  {"id": 42, "answer": "What time is it?", "is_correct": false, "question_id": 21},
+
+  {"id": 43, "answer": "A reduction in the original price.", "is_correct": true, "question_id": 22},
+  {"id": 44, "answer": "Paying more than the label price.", "is_correct": false, "question_id": 22},
+
+  {"id": 45, "answer": "Can you give me a better price?", "is_correct": true, "question_id": 23},
+  {"id": 46, "answer": "I will take it at full price.", "is_correct": false, "question_id": 23},
+
+  {"id": 47, "answer": "Can I try this on?", "is_correct": true, "question_id": 24},
+  {"id": 48, "answer": "Where is the exit?", "is_correct": false, "question_id": 24},
+
+  {"id": 49, "answer": "At the cashier / checkout counter.", "is_correct": true, "question_id": 25},
+  {"id": 50, "answer": "In the fitting room.", "is_correct": false, "question_id": 25}
 ]

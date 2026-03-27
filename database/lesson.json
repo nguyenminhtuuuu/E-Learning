@@ -19,5 +19,20 @@
     "content": "Cách giới thiệu tên, tuổi và nghề nghiệp bằng tiếng Anh.",
     "video_url": "",
     "khoahoc_id": 1
+  },
+  {
+    "id": 4,
+    "title": "Cấu trúc một bài luận chuẩn",
+    "content": "Một bài luận tiếng Anh thông thường bao gồm 3 phần chính: Introduction (Mở bài), Body (Thân bài - thường có 2-3 đoạn), và Conclusion (Kết luận). Bạn sẽ học cách viết 'Thesis Statement' ăn điểm trong bài này.",
+    "video_url": "https://www.youtube.com/embed/oA6_W_y8fX8",
+    "khoahoc_id": 2
+  },
+  {
+    "id": 5,
+    "title": "Mua sắm và mặc cả",
+    "content": "Học các mẫu câu: 'How much does it cost?', 'Can I get a discount?' và cách hỏi về size, màu sắc khi đi shopping.",
+    "video_url": "https://www.youtube.com/embed/5mYvF9A8T7k",
+    "khoahoc_id": 1
   }
+
 ]

@@ -1,0 +1,34 @@
+{%extends 'layout/base.html'%}
+{% block header %}
+{% endblock %}
+
+{%block content%}
+<h2 class="text-info text-center mt-3">Chào giáo viên '{{current_user.username}}' !</h2>
+
+<table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>STT</th>
+            <th>Học viên</th>
+            <th>Email</th>
+            <th>Tiến độ học</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in user %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ u.name }}</td>
+            <td>{{ u.email }}</td>
+            <td>
+                <a href="{{ url_for('teacher_view_progress', user_id=u.id) }}" class="btn btn-sm btn-outline-info">
+                <i class="fa-solid fa-chart-line"></i> Xem chi tiết
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+

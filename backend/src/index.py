@@ -1,15 +1,20 @@
 import re
 import cloudinary
-from flask import render_template, request, redirect, flash, url_for, jsonify
+from flask import render_template, request, redirect, flash, url_for, jsonify, send_file
 import math
 from flask_login import login_user, current_user, logout_user, login_required
 import cloudinary.uploader
-from backend.src import dao, db, login, app, admin
-from backend.src.models import Enrollment
+from sqlalchemy.sql.functions import user
 
+from backend.src import dao, db, login, app, admin
+from backend.src.models import Enrollment, Question
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated and current_user.role.name == 'TEACHER':
+        return redirect(url_for('teacher'))
+    if current_user.is_authenticated and current_user.role.name == 'ADMIN':
+        return redirect(url_for('admin.index'))
     q = request.args.get('q')
     capDo_id = request.args.get('capDo_id')
     page = request.args.get('page')
@@ -37,12 +42,12 @@ def login_my_user():
 
         user = dao.auth_user(username, password)
 
-        print(user.password)
-
         if user:
             login_user(user)
             if user.role.name == 'ADMIN':
                 return redirect(url_for('admin.index'))
+            elif user.role.name == 'TEACHER':
+                return redirect(url_for('teacher'))
 
             return redirect('/')
         else:
@@ -73,8 +78,6 @@ def register():
         password = request.form.get("password")
         confirm = request.form.get("confirm")
         email = request.form.get('email')
-        # import pdb #kiểm tra lỗi
-        # pdb.set_trace()
 
         if not password.__eq__(confirm):
             err_msg = "Mật khẩu không khớp!"
@@ -91,17 +94,9 @@ def register():
             try:
                 dao.add_user(name, username, password, email, avatar=path_file)
                 return redirect('/login')
-            # except:
-            #     db.session.rollback()
-            #     err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
-
-            except Exception as e:
+            except:
                 db.session.rollback()
-                print("--- LỖI SQL THỰC SỰ ---")
-                print(e)  # Tú nhìn vào màn hình PyCharm/Terminal sẽ thấy lỗi này
-                print("-----------------------")
                 err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
-
 
     return render_template("register.html", err_msg=err_msg)
 
@@ -116,15 +111,19 @@ def login_admin_process():
         return redirect(url_for('admin.index'))
 
 # Lesson
-
 @app.route('/lesson/<int:khoahoc_id>')
 def lesson(khoahoc_id):
     lessons = dao.get_lesson_by_khoahoc(khoahoc_id)
     message = None
+    is_registered = False
+    if current_user.is_authenticated:
+        registered_id = dao.get_registered_id(current_user)
+        if khoahoc_id in registered_id:
+            is_registered = True
     if not lessons:
         message = f"Khóa học chưa có bài học!"
     khoahoc = dao.get_khoahoc_by_id(khoahoc_id)
-    return render_template('lesson.html', lessons=lessons, khoahoc=khoahoc, message=message)
+    return render_template('lesson.html', lessons=lessons, khoahoc=khoahoc, message=message,is_registered=is_registered)
 
 @app.route('/lesson_detail/<int:lesson_id>')
 @login_required
@@ -135,6 +134,7 @@ def lesson_detail(lesson_id):
     if lesson.khoahoc_id in register:
        is_registered =  True
     message = f"Bạn chưa đăng ký khóa học này!!"
+    dao.update_user_progress(user_id=current_user.id, khoahoc_id=lesson.khoahoc_id,lesson_id=lesson_id)
     return render_template('lesson_detail.html', lesson=lesson, is_registered=is_registered, message=message)
 
 @app.route('/dangky/<int:khoahoc_id>')
@@ -154,9 +154,20 @@ def dangky(khoahoc_id):
 
 # làm quiz
 @app.route("/quiz/<int:khoahoc_id>", methods=['get', 'post'])
+@app.route("/quiz/lesson/<int:lesson_id>", methods=['get', 'post'])
 @login_required
-def quiz(khoahoc_id):
-    questions = dao.get_question_by_maKH(khoahoc_id)
+def quiz(khoahoc_id=None, lesson_id=None):
+    questions=[]
+
+    if lesson_id:
+        questions = dao.get_question_by_lesson(lesson_id)
+
+        lesson_obj = dao.get_lesson_by_id(lesson_id)
+        khoahoc_id = lesson_obj.khoahoc_id
+
+    else:
+        questions = dao.get_question_by_maKH(khoahoc_id)
+
     score = 0
     total = len(questions)
     result_score = 0
@@ -178,9 +189,9 @@ def quiz(khoahoc_id):
         result_score = (score/total) * 10 if total > 0 else 0
 
         if result_score >= 5:
-            dao.get_user_progress(user_id=current_user.id, khoahoc_id=khoahoc_id, score=result_score)
+            dao.update_user_progress(user_id=current_user.id, khoahoc_id=khoahoc_id, lesson_id=lesson_id,score=result_score)
 
-    return render_template('quiz.html', questions=questions, result_score=result_score, score=score, total=total, show_results=show_results, user_answer_id=user_answer_id,khoahoc_id=khoahoc_id)
+    return render_template('quiz.html', questions=questions, result_score=result_score, score=score, total=total, show_results=show_results, user_answer_id=user_answer_id,khoahoc_id=khoahoc_id,lesson_id=lesson_id)
 
 
 
@@ -189,15 +200,35 @@ def quiz(khoahoc_id):
 @login_required
 def progress():
     progress = dao.get_user_progress(current_user.id)
-    return render_template('progress.html', progress_data=progress)
+    return render_template('progress.html', progress_data=progress,is_teacher_view=False)
 
 
-# # cấp chứng chỉ
-# @app.route('certificate', methods=['get', 'post'])
-# def certificate():
-#     return render_template('certificate.html')
+# cấp chứng chỉ
+@app.route('/certificate/<int:khoahoc_id>', methods=['get', 'post'])
+def certificate(khoahoc_id):
+    progress = dao.get_user_progress(current_user.id)
+    course_progress = next((item for item in progress if item['course_id'] == khoahoc_id), None)
+
+    if course_progress and course_progress['percent'] == 100:
+        file_path = dao.create_pdf_certificate(current_user.name, course_progress['course_name'])
+        return send_file(file_path, as_attachment=True)
+    return redirect('/')
 
 
+
+# giao vien
+@app.route('/teacher')
+@login_required
+def teacher():
+    user = dao.get_user_enrolled()
+    return render_template('teacher.html', user=user)
+
+
+@app.route('/teacher/view-progress/<int:user_id>')
+@login_required
+def teacher_view_progress(user_id):
+    progress_data = dao.get_user_progress(user_id)
+    return render_template('progress.html', progress_data=progress_data, is_teacher_view=True)
 
 if __name__ == '__main__':
     with app.app_context():

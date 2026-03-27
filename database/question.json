@@ -1,7 +1,35 @@
 [
-  {
-    "id": 1 ,
-    "content": "What would you say to ask for directions?",
-    "khoahoc_id": 1
-  }
+  {"id": 1, "content": "What is the main goal of this writing course?", "khoahoc_id": 2, "lesson_id": 1},
+  {"id": 2, "content": "How many steps are there in a professional writing process?", "khoahoc_id": 2, "lesson_id": 1},
+  {"id": 3, "content": "Is academic writing the same as creative writing?", "khoahoc_id": 2, "lesson_id": 1},
+  {"id": 4, "content": "What should you do before starting to write an essay?", "khoahoc_id": 2, "lesson_id": 1},
+  {"id": 5, "content": "Who is this course designed for?", "khoahoc_id": 2, "lesson_id": 1},
+
+
+  {"id": 6, "content": "Which greeting is used before 12:00 PM?", "khoahoc_id": 1, "lesson_id": 2},
+  {"id": 7, "content": "What is a formal way to say 'Hello'?", "khoahoc_id": 1, "lesson_id": 2},
+  {"id": 8, "content": "How do you respond to 'How do you do?'", "khoahoc_id": 1, "lesson_id": 2},
+  {"id": 9, "content": "Which one is an informal greeting?", "khoahoc_id": 1, "lesson_id": 2},
+  {"id": 10, "content": "When should you say 'Good evening'?", "khoahoc_id": 1, "lesson_id": 2},
+
+
+  {"id": 11, "content": "How do you ask for someone's name?", "khoahoc_id": 1, "lesson_id": 3},
+  {"id": 12, "content": "Which sentence is used to tell your age?", "khoahoc_id": 1, "lesson_id": 3},
+  {"id": 13, "content": "How do you introduce your job?", "khoahoc_id": 1, "lesson_id": 3},
+  {"id": 14, "content": "What is a polite response after being introduced?", "khoahoc_id": 1, "lesson_id": 3},
+  {"id": 15, "content": "Which word is used to describe your hometown?", "khoahoc_id": 1, "lesson_id": 3},
+
+
+  {"id": 16, "content": "An essay usually has how many main parts?", "khoahoc_id": 2, "lesson_id": 4},
+  {"id": 17, "content": "Where is the 'Thesis Statement' located?", "khoahoc_id": 2, "lesson_id": 4},
+  {"id": 18, "content": "What is the purpose of the 'Conclusion'?", "khoahoc_id": 2, "lesson_id": 4},
+  {"id": 19, "content": "How many body paragraphs should a standard essay have?", "khoahoc_id": 2, "lesson_id": 4},
+  {"id": 20, "content": "What is a 'Hook' in the introduction?", "khoahoc_id": 2, "lesson_id": 4},
+
+
+  {"id": 21, "content": "How do you ask for the price?", "khoahoc_id": 1, "lesson_id": 5},
+  {"id": 22, "content": "What does 'discount' mean?", "khoahoc_id": 1, "lesson_id": 5},
+  {"id": 23, "content": "Which sentence is used for bargaining?", "khoahoc_id": 1, "lesson_id": 5},
+  {"id": 24, "content": "How do you ask to try on a shirt?", "khoahoc_id": 1, "lesson_id": 5},
+  {"id": 25, "content": "Where do you pay for the items?", "khoahoc_id": 1, "lesson_id": 5}
 ]

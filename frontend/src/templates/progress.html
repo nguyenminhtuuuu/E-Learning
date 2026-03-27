@@ -10,39 +10,51 @@
 
     <div class="row">
         {% for item in progress_data %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">{{ item.course_name }}</h5>
-                    <p class="text-muted small mb-3">Trạng thái: {{ item.completed }}/{{ item.total }} bài học</p>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card border-1.5 shadow-sm h-100">
+                    <img src="{{item.course_image}}" class="card-img-top" alt="{{ item.course_name }}" style="height: 180px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ item.course_name }}</h5>
+                        <p class="text-muted small mb-3">Trạng thái: {{ item.completed }}/{{ item.total }} bài học</p>
 
-                    <div class="progress mb-3" style="height: 12px; border-radius: 10px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated
-                                    {% if item.percent < 50 %} bg-info
-                                    {% elif item.percent < 100 %} bg-primary
-                                    {% else %} bg-success {% endif %}"
-                             role="progressbar"
-                             style="width: {{ item.percent }}%"
-                             aria-valuenow="{{ item.percent }}"
-                             aria-valuemin="0"
-                             aria-valuemax="100">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="fw-bold text-primary">{{ item.percent }}%</span>
+                            <p class="text-muted small mb-0">Trạng thái: {{ item.completed }}/{{ item.total }} bài học</p>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">{{ item.percent }}%</span>
+                        <div class="progress mb-3" style="height: 12px; border-radius: 10px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated
+                                        {% if item.percent < 50 %} bg-info
+                                        {% elif item.percent < 100 %} bg-primary
+                                        {% else %} bg-success {% endif %}"
+                                 role="progressbar"
+                                 style="width: {{ item.percent }}%"
+                                 aria-valuenow="{{ item.percent }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
 
-                        {% if item.percent == 100 %}
-                            <a href="{{ url_for('get_certificate', khoahoc_id=item.course_id) }}"
-                               class="btn btn-warning btn-sm rounded-pill px-3 shadow-sm">
-                               🎓 Nhận Chứng Chỉ
-                            </a>
+                        {% if not is_teacher_view %}
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('lesson', khoahoc_id=item.course_id) }}"
+                                   class="btn btn-primary rounded-pill">
+                                   {% if item.percent == 0 %} Bắt đầu học {% else %} Học tiếp {% endif %}
+                                </a>
 
+                                {% if item.percent == 100 %}
+                                    <a href="{{ url_for('certificate', khoahoc_id=item.course_id) }}" class="btn btn-outline-warning rounded-pill">🎓 Nhận chứng chỉ</a>
+                                {% else %}
+                                    <button class="btn btn-outline-warning disabled rounded-pill" style="cursor: not-allowed;">
+                                       🔒 Nhận chứng chỉ
+                                    </button>
+                                {% endif %}
+                            </div>
                         {% endif %}
+
                     </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

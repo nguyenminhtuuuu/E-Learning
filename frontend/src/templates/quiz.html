@@ -6,58 +6,81 @@
     <hr>
 
     {% if show_results %}
-    <div class="alert alert-info shadow text-center">
-        <h3>KẾT QUẢ BÀI LÀM</h3>
-        <h2 class="text-danger">{{ "%.1f"|format(result_score) }} / 10 Điểm</h2>
-        <p>Số câu trả lời đúng: <strong>{{ score }} / {{ total }}</strong></p>
+        <div class="alert alert-info shadow text-center">
+                <h3>KẾT QUẢ BÀI LÀM</h3>
+                <h2 class="text-danger">{{ "%.1f"|format(result_score) }} / 10 Điểm</h2>
+                <p>Số câu trả lời đúng: <strong>{{ score }} / {{ total }}</strong></p>
 
-        <div class="progress mb-3" style="height: 25px;">
-            <div class="progress-bar bg-success" style="width: {{ (score/total)*100 }}%">
-                {{ (score/total)*100 }}%
-            </div>
+                <div class="progress mb-3" style="height: 25px;">
+                    <div class="progress-bar bg-success" style="width: {{ (score/total)*100 }}%">
+                        {{ (score/total)*100 | int if total > 0 else 0 }}%
+                    </div>
+                </div>
+
+            {% if lesson_id %}
+                <a href="{{ url_for('quiz', lesson_id=lesson_id) }}" class="btn btn-primary">
+                    Làm lại bài tập
+                </a>
+                <a href="{{ url_for('lesson_detail', lesson_id=lesson_id) }}" class="btn btn-outline-secondary">
+                    Quay lại bài học
+                </a>
+            {% else %}
+                <a href="{{ url_for('quiz', khoahoc_id=khoahoc_id) }}" class="btn btn-primary">
+                    Làm lại Quiz tổng hợp
+                </a>
+            {% endif %}
         </div>
-        <a href="{{ url_for('quiz', khoahoc_id=khoahoc_id) }}" class="btn btn-primary">Làm lại bài</a>
-    </div>
     {% endif %}
 
-    <form method="POST">
-        {% for q in questions %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5>Câu {{ loop.index }}: {{ q.content }}</h5>
-                {% for a in q.answers %}
-                <div class="form-check p-2 rounded mb-1
-    {% if show_results and a.is_correct %} bg-success text-white fw-bold shadow-sm {% endif %}
-    {% if show_results and user_answer_id[q.id]|int == a.id|int and not a.is_correct %} bg-danger text-white {% endif %}">
-                    <input class="form-check-input" type="radio" name="q_{{ q.id }}" value="{{ a.id }}"
-
-                           {% if user_answer_id and user_answer_id[q.id]|int== a.id|int %} checked
-                           {% endif %}
-
-                           {% if show_results %} disabled
-                           {% endif %}
-
-                           required>
-
-                    <label class="form-check-label w-100">
-                        {{ a.answer }}
-                        {% if show_results %}
-                        {% if a.is_correct %}
-                        <span class="float-end"></span>
-                        {% elif user_answer_id[q.id]|int == a.id|int %}
-                        <span class="float-end"></span>
-                        {% endif %}
-                        {% endif %}
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
+    {% if total == 0 %}
+        <div class="alert alert-warning shadow text-center">
+            <h5>Chưa có câu hỏi nào được bổ sung !</h5>
+            {% if lesson_id %}
+                <a href="{{ url_for('lesson_detail', lesson_id=lesson_id) }}" class="btn btn-secondary">Quay lại bài học</a>
+            {% else %}
+                <a href="{{ url_for('lesson', khoahoc_id=khoahoc_id) }}" class="btn btn-secondary">Quay lại danh sách bài học</a>
+            {% endif %}
         </div>
-        {% endfor %}
+    {% else %}
+            <form method="POST">
+                {% for q in questions %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5>Câu {{ loop.index }}: {{ q.content }}</h5>
+                            {% for a in q.answers %}
+                                <div class="form-check p-2 rounded mb-1
+                    {% if show_results and a.is_correct %} bg-success text-white fw-bold shadow-sm {% endif %}
+                    {% if show_results and user_answer_id[q.id]|int == a.id|int and not a.is_correct %} bg-danger text-white {% endif %}">
+                                    <input class="form-check-input" type="radio" name="q_{{ q.id }}" value="{{ a.id }}"
 
-        {% if not show_results %}
-        <button type="submit" class="btn btn-success btn-lg w-100 mb-5">Làm xong</button>
-        {% endif %}
-    </form>
+                                           {% if user_answer_id and user_answer_id[q.id]|int== a.id|int %} checked
+                                           {% endif %}
+
+                                           {% if show_results %} disabled
+                                           {% endif %}
+
+                                           required>
+
+                                    <label class="form-check-label w-100">
+                                        {{ a.answer }}
+                                        {% if show_results %}
+                                        {% if a.is_correct %}
+                                        <span class="float-end"></span>
+                                        {% elif user_answer_id[q.id]|int == a.id|int %}
+                                        <span class="float-end"></span>
+                                        {% endif %}
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% if not show_results %}
+                <button type="submit" class="btn btn-success btn-lg w-100 mb-5">Làm xong</button>
+                {% endif %}
+            </form>
+    {% endif %}
 </div>
 {% endblock %}

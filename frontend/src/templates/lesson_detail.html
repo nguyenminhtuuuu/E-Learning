@@ -17,6 +17,9 @@
         <h5 class="mb-3 text-success">📖 Nội dung bài học</h5>
         <p class="text-muted" style="line-height: 1.8;">{{ lesson.content }}</p>
     </div>
+    <a class="btn btn-warning fw-bold text-white shadow-sm" href="/quiz/lesson/{{ lesson.id }}">
+    📝 Luyện tập
+</a>
 </div>
 {%else%}
  <p style="color:red; font-weight:bold;">{{message}}</p>

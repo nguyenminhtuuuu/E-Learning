@@ -7,31 +7,35 @@
         <div class="collapse navbar-collapse" id="mynavbar">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Trang chủ</a>
+                    <a class="nav-link {{ 'active' if request.path == '/' and not request.args.get('capDo_id') }} }}" href="/">Trang chủ</a>
                 </li>
                 {%for c in capdo%}
                 <li class="nav-item">
-                    <a class="nav-link" href="/?capDo_id={{c.id}}">{{c.name}}</a>
+                    <a class="nav-link {{ 'active' if request.args.get('capDo_id')|int == c.id }}" href="/?capDo_id={{c.id}}">{{c.name}}</a>
                 </li>
                 {%endfor%}
+
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.path == '/progress' }}" href="/progress">&#128221Tiến độ học</a>
+                </li>
 
 
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     {% if current_user.role.name == 'ADMIN'%}
-                    <a class="nav-link active" href="/admin">
+                    <a class="nav-link {{ 'active' if request.path == '/admin' }}" href="/admin">
                         <img src="{{current_user.avatar}}" width="20">
                         Chào {{current_user.name}}
                     </a>
                     {%else%}
-                    <a class="nav-link active" href="/login">
+                    <a class="nav-link {{ 'active' if request.path == '/login' }}" href="/login">
                         <img src="{{current_user.avatar}}" width="20">
                         Chào {{current_user.name}}
                     </a>
                     {%endif%}
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/logout">&#128220Đăng xuất</a>
+                    <a class="nav-link {{ 'active' if request.path == '/logout' }}" href="/logout">Đăng xuất</a>
                 </li>
                 </li>
 
@@ -39,11 +43,11 @@
 
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link active" href="/login">&#128220Đăng nhập</a>
+                    <a class="nav-link {{ 'active' if request.path == '/login' }}" href="/login">&#128220Đăng nhập</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/register">&#128105;Đăng ký</a>
+                    <a class="nav-link {{ 'active' if request.path == '/register' }}" href="/register">&#128105;Đăng ký</a>
                 </li>
 
                 {% endif %}
