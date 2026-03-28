@@ -48,8 +48,8 @@ def login_my_user():
                 return redirect(url_for('admin.index'))
             elif user.role.name == 'TEACHER':
                 return redirect(url_for('teacher'))
-
             return redirect('/')
+
         else:
             flash("Tài khoản hoặc mật khẩu không đúng!", "danger")
             return redirect(url_for('login_my_user'))
@@ -106,9 +106,25 @@ def get_user(user_id):
     return dao.get_user_by_id(user_id)
 
 
+# Endpoints
+
 @app.route("/admin")
 def login_admin_process():
         return redirect(url_for('admin.index'))
+
+@app.route("/teacher")
+def login_teacher():
+    q = request.args.get('q')
+    capDo_id = request.args.get('capDo_id')
+    page = request.args.get('page')
+    khoahoc = dao.load_khoahoc(q=q, capDo_id=capDo_id, page=page)
+    message = None
+    if q and not khoahoc:
+        message = f"Không tìm thấy khóa học! Vui lòng tìm kiếm khóa học khác!"
+    pages = math.ceil(dao.count_khoahoc() / app.config["PAGE_SIZE"])
+
+    registered_id = dao.get_registered_id(current_user)
+    return render_template('teacher/index.html', khoahoc=khoahoc, message=message, pages=pages, registered_id=registered_id)
 
 # Lesson
 @app.route('/lesson/<int:khoahoc_id>')

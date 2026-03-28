@@ -1,0 +1,49 @@
+{%extends 'layout/base.html'%}
+
+{%block header_extra%}
+<li class="nav-item">
+    <a class="nav-link" href="/">Thêm khóa học</a>
+</li>
+{%endblock%}
+
+{%block content%}
+
+{% if pages > 1 %}
+
+<ul class="pagination mt-3">
+    {%for i in range(1, pages + 1)%}
+    <li class="page-item"><a class="page-link" href="/?page={{i}}">{{i}}</a></li>
+    {%endfor%}
+</ul>
+
+{% endif %}
+
+<div class="row">
+    {%for k in khoahoc%}
+    <div class="col-md-3 col-12" style="padding: 0.7rem">
+        <div class="card">
+            <a href="/lesson/{{k.id}}" style="text-decoration: none; color: inherit;">
+                <img class="card-img-top" src="{{k.image}}" alt="{{k.name}}">
+                <div class="card-body">
+                    <h4 class="card-title">{{k.name}}</h4>
+                    <p class="card-text">{{k.hocPhi}}$</p>
+                </div>
+            </a>
+            <div class="card-body pt-0">
+                {% if k.id in registered_id %}
+                <button class="btn btn-success">Đã đăng ký</button>
+                {% else %}
+                <a class="btn btn-danger" href="/dangky/{{k.id}}">Đăng ký</a>
+                {% endif %}
+            </div>
+        </div>
+        </a>
+    </div>
+    {%endfor%}
+    {% if message %}
+    <p style="color:red; font-weight:bold;">{{ message }}</p>
+    {% endif %}
+
+</div>
+
+{%endblock%}
