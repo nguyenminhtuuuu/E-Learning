@@ -33,8 +33,13 @@ def load_khoahoc(q=None, id=None,capDo_id=None, page=None):
         query = query.slice(start, end)
     return query.all()
 
+def load_khoahoc_by_user_id(user_id):
+    return db.session.query(Khoahoc, func.count(Enrollment.id).label('so_luong')).outerjoin(Enrollment,
+        Khoahoc.id == Enrollment.khoahoc_id).filter(Khoahoc.user_id==user_id).group_by(Khoahoc.id).all()
+
 def get_khoahoc_by_id(id: None):
     return Khoahoc.query.filter(Khoahoc.id==id).first()
+
 
 def get_registered_id(user):
     registered_id = []
@@ -174,8 +179,8 @@ def create_pdf_certificate(user_name, course_name):
 
 
 # lay danh sach hoc vien
-def get_user_enrolled():
-    return db.session.query(User).join(Enrollment, User.id == Enrollment.user_id).all()
+def get_user_enrolled(khoahoc_id):
+    return db.session.query(User).join(Enrollment, User.id == Enrollment.user_id).filter(Enrollment.khoahoc_id==khoahoc_id).all()
 
 if __name__ == '__main__':
     with app.app_context():

@@ -30,7 +30,7 @@ class MyKhoahocView(ModelView):
     def _count_enrollments(view, context, model, name):
         return len(model.enrollments)
 
-    column_list = ['id', 'name', 'Capdo', 'hocPhi', 'created_date', 'so_hoc_vien']
+    column_list = ['id', 'name', 'Capdo', 'hocPhi', 'created_date', 'user', 'so_hoc_vien']
     column_searchable_list = ['name']
     column_filters = ['Capdo']
     column_labels = {
@@ -39,6 +39,7 @@ class MyKhoahocView(ModelView):
         'hocPhi': 'Học phí',
         'active': 'Trạng thái',
         'created_date': 'Ngày tạo',
+        'user': 'Người tạo khóa học',
         'so_hoc_vien': 'Số học viên'
     }
     column_formatters = {

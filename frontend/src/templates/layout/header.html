@@ -14,12 +14,17 @@
                     <a class="nav-link {{ 'active' if request.args.get('capDo_id')|int == c.id }}" href="/?capDo_id={{c.id}}">{{c.name}}</a>
                 </li>
                 {%endfor%}
-                <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.path == '/progress' }}" href="/progress">&#128221Tiến độ học</a>
-                </li>
+
                 {% if current_user.is_authenticated and current_user.role.name == 'TEACHER' %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Quản lý khóa học</a>
+                    <a class="nav-link {{ 'active' if request.path == '/progress' }}" href="/teacher-progress">&#128221Tiến độ học</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/khoahoc_manage">Quản lý khóa học</a>
+                </li>
+                {%else%}
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.path == '/progress' }}" href="/progress">&#128221Tiến độ học</a>
                 </li>
                 {% endif %}
 

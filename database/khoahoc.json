@@ -5,7 +5,8 @@
     "capDo_id": 1,
     "hocPhi": 500,
     "image": "https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041156/daily_conversational_english_p81vyi.png",
-    "description": "Khóa học giúp học viên làm quen với các tình huống giao tiếp cơ bản trong đời sống như chào hỏi, mua sắm, ăn uống và hỏi đường."
+    "description": "Khóa học giúp học viên làm quen với các tình huống giao tiếp cơ bản trong đời sống như chào hỏi, mua sắm, ăn uống và hỏi đường.",
+    "user_id": 3
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "capDo_id": 2,
     "hocPhi": 900,
     "image": "https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041156/english_essay_writing_db1lrc.png",
-    "description": "Hướng dẫn cách viết bài luận theo cấu trúc chuẩn, phát triển ý tưởng và chỉnh sửa để đạt phong cách học thuật."
+    "description": "Hướng dẫn cách viết bài luận theo cấu trúc chuẩn, phát triển ý tưởng và chỉnh sửa để đạt phong cách học thuật.",
+    "user_id": 3
   },
   {
     "id": 3,
@@ -21,6 +23,7 @@
     "capDo_id": 3,
     "hocPhi": 1200,
     "image": "https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041157/international_business_english_wzv0me.png",
-    "description": "Tập trung vào đàm phán hợp đồng, viết báo cáo kinh doanh và thuyết trình dự án lớn."
+    "description": "Tập trung vào đàm phán hợp đồng, viết báo cáo kinh doanh và thuyết trình dự án lớn.",
+    "user_id": 4
   }
 ]

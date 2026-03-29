@@ -1,10 +1,10 @@
-{%extends 'layout/base.html'%}
-{% block header %}
-{% endblock %}
+{% extends 'layout/base.html' %}
+{% block content %}
 
-{%block content%}
-<h2 class="text-info text-center mt-3">Chào giáo viên '{{current_user.username}}' !</h2>
-
+<h3 class="text-info text-center pt-3">Quản lý tiến độ học</h3>
+{% if message %}
+    <p style="color:red; font-weight:bold;">{{message}}</p>
+{% else %}
 <table class="table table-hover">
     <thead class="table-dark">
         <tr>
@@ -29,6 +29,5 @@
         {% endfor %}
     </tbody>
 </table>
-
-{% endblock %}
-
+{%endif%}
+{%endblock%}

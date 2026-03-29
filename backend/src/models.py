@@ -43,9 +43,11 @@ class Khoahoc(Base):
     image = Column(String(300),
                    default='https://res.cloudinary.com/deeqcwnpm/image/upload/v1765041156/daily_conversational_english_p81vyi.png')
     description = Column(String(300))
-    questions = relationship('Question', backref="khoahoc", lazy=True)
-    lessons = relationship('Lesson', backref='khoahoc')
-    enrollments = relationship('Enrollment', backref='khoahoc_enroll', lazy=True)
+    questions = relationship('Question', backref="khoahoc", lazy=True, cascade='all, delete-orphan')
+    lessons = relationship('Lesson', backref='khoahoc', cascade='all, delete-orphan')
+    enrollments = relationship('Enrollment', backref='khoahoc_enroll', lazy=True, cascade="all, delete-orphan")
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    user = relationship('User', backref='khoahoc_user', lazy=True)
 
 class Lesson(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -53,6 +55,7 @@ class Lesson(db.Model):
     content = Column(Text)
     video_url = Column(String(300))
     khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
+    questions = db.relationship('Question',backref='lesson',cascade='all, delete-orphan')
 
 
 class Question(db.Model):
@@ -93,11 +96,28 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
+        # Tạo cấp độ
         c1 = Capdo(name="Beginner")
         c2 = Capdo(name="Intermediate")
         c3 = Capdo(name="Advanced")
         db.session.add_all([c1, c2, c3])
         db.session.commit()
+
+        # Tạo User
+        import hashlib
+
+        u1 = User(name="Admin", username="admin", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+                  email="admin@gmail.com", role=UserEnum.ADMIN)
+        u2 = User(name="Hoa", username="sv1", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+                  email="sv1@gmail.com", role=UserEnum.USER)
+        u3 = User(name="Huy", username="gv1", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+                  email="gv1@gmail.com", role=UserEnum.TEACHER)
+        u4 = User(name="Hạnh", username="gv2", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
+                  email="gv2@gmail.com", role=UserEnum.TEACHER)
+        db.session.add_all([u1, u2, u3, u4])
+        db.session.commit()
+
+        # Insert bảng ...
 
         BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         json_path = os.path.join(BASE_DIR, 'database')
@@ -128,13 +148,4 @@ if __name__ == "__main__":
 
 
 
-        import hashlib
 
-        u1 = User(name="Admin", username="admin", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-                  email="admin@gmail.com", role=UserEnum.ADMIN)
-        u2 = User(name="Hoa", username="sv1", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-                  email="sv1@gmail.com", role=UserEnum.USER)
-        u3 = User(name="Huy", username="gv1", password=str(hashlib.md5("123".encode("utf-8")).hexdigest()),
-                  email="gv1@gmail.com", role=UserEnum.TEACHER)
-        db.session.add_all([u1,u2,u3])
-        db.session.commit()

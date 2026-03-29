@@ -1,12 +1,7 @@
 {%extends 'layout/base.html'%}
-
-{%block header_extra%}
-<li class="nav-item">
-    <a class="nav-link" href="/">Thêm khóa học</a>
-</li>
-{%endblock%}
-
 {%block content%}
+
+<h2 class="text-info text-center mt-3">Chào giáo viên '{{current_user.username}}' !</h2>
 
 {% if pages > 1 %}
 
@@ -23,7 +18,7 @@
     <div class="col-md-3 col-12" style="padding: 0.7rem">
         <div class="card">
             <a href="/lesson/{{k.id}}" style="text-decoration: none; color: inherit;">
-                <img class="card-img-top" src="{{k.image}}" alt="{{k.name}}">
+                <img alt="{{k.name}}" class="card-img-top" src="{{k.image}}">
                 <div class="card-body">
                     <h4 class="card-title">{{k.name}}</h4>
                     <p class="card-text">{{k.hocPhi}}$</p>
@@ -33,7 +28,9 @@
                 {% if k.id in registered_id %}
                 <button class="btn btn-success">Đã đăng ký</button>
                 {% else %}
-                <a class="btn btn-danger" href="/dangky/{{k.id}}">Đăng ký</a>
+                 <form action="/dangky/{{k.id}}" method="post">
+                    <button class="btn btn-danger">Đăng ký</button>
+                 </form>
                 {% endif %}
             </div>
         </div>
@@ -46,4 +43,5 @@
 
 </div>
 
-{%endblock%}
+{% endblock %}
+

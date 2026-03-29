@@ -1,0 +1,23 @@
+{%extends 'layout/base.html'%}
+{%block content%}
+<form action="/add_khoahoc">
+    <div mb-3 mt-3>
+        Tên khóa học: <input type="text" class="form-control required" placeholder="Nhập tên khóa học" name="khoahoc_name">
+    </div>
+    <div mb-3 mt-3>
+        Học phí: <input type="text" class="form-control" placeholder="Nhập học phí" name="khoahoc_hp" required>
+    </div>
+    <div>
+        <label for="comment">Mô tả:</label>
+        <textarea class="form-control" rows="5" id="comment" name="khoahoc_text"></textarea>
+    </div>
+    <div class="mt-2">
+        <form action="/upload" method="post" enctype="multipart/form-data">
+           Hình ảnh: <input type="file" name="ten_file" class="form-control mb-2" accept="image/*">
+        </form>
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-success">Thêm khóa học</button>
+    </div>
+</form>
+{%endblock%}

@@ -1,0 +1,19 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+
+<h3 class="text-info text-center pt-3">Khóa học của tôi</h3>
+
+
+{%for k, count in khoahoc%}
+<a href="/teacher-progress-detail/{{k.id}}" class="list-group-item d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+        <div class="me-3 text-danger fs-4">📚</div>
+        <div>
+            <div class="fw-bold">{{ k.name }}</div>
+            <small class="text-muted">Số lượng người đăng ký: {{count}}</small>
+        </div>
+    </div>
+</a>
+{%endfor%}
+
+{%endblock%}
