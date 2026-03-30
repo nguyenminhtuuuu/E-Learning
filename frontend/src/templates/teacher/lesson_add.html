@@ -1,0 +1,22 @@
+{%extends 'layout/base.html'%}
+{%block content%}
+<form action="/add_lesson/{{k.id}}" enctype="multipart/form-data" method="post">
+    <div class="mb-3 mt-3">
+        Tên bài học: <input class="form-control" name="lesson_name" placeholder="Nhập tên bài học"
+                            required type="text">
+    </div>
+    <div>
+        <label for="content">Mô tả:</label>
+        <textarea class="form-control" id="content" name="lesson_text" rows="5"></textarea>
+    </div>
+    <div class="mt-2">
+        Video: <input class="form-control mb-2" name="ten_file" type="file">
+    </div>
+    <div class="mt-3">
+        <a class="btn btn-info btn-sm" href="/">Thêm câu hỏi</a>
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-success" type="submit">Thêm bài học</button>
+    </div>
+</form>
+{%endblock%}

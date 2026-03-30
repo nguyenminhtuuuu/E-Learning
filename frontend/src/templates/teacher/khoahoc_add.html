@@ -1,23 +1,29 @@
 {%extends 'layout/base.html'%}
 {%block content%}
-<form action="/add_khoahoc">
-    <div mb-3 mt-3>
-        Tên khóa học: <input type="text" class="form-control required" placeholder="Nhập tên khóa học" name="khoahoc_name">
+<form action="/add_khoahoc" enctype="multipart/form-data" method="post">
+    <div class="mb-3 mt-3">
+        Tên khóa học: <input class="form-control" name="khoahoc_name" placeholder="Nhập tên khóa học"
+                             type="text" required>
+    </div>
+    <div class="mt-2"> Cấp độ:
+        <select class="form-select" name="capdo_id">
+            {%for c in capdo%}
+            <option value="{{c.id}}">{{c.name}}</option>
+            {%endfor%}
+        </select>
     </div>
     <div mb-3 mt-3>
-        Học phí: <input type="text" class="form-control" placeholder="Nhập học phí" name="khoahoc_hp" required>
+        Học phí: <input class="form-control" name="khoahoc_hp" placeholder="Nhập học phí" required type="text">
     </div>
     <div>
         <label for="comment">Mô tả:</label>
-        <textarea class="form-control" rows="5" id="comment" name="khoahoc_text"></textarea>
+        <textarea class="form-control" id="comment" name="khoahoc_text" rows="5"></textarea>
     </div>
     <div class="mt-2">
-        <form action="/upload" method="post" enctype="multipart/form-data">
-           Hình ảnh: <input type="file" name="ten_file" class="form-control mb-2" accept="image/*">
-        </form>
+        Hình ảnh: <input accept="image/*" class="form-control mb-2" name="ten_file" type="file">
     </div>
     <div class="mt-4">
-        <button class="btn btn-success">Thêm khóa học</button>
+        <button class="btn btn-success" type="submit">Thêm khóa học</button>
     </div>
 </form>
 {%endblock%}

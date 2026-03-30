@@ -94,6 +94,9 @@ def get_question_by_maKH(id):
 def get_question_by_lesson(id):
     return Question.query.filter(Question.lesson_id == id).all()
 
+def get_question_by_khoahoc(id):
+    return Question.query.filter(Question.khoahoc_id==id).all()
+
 def get_correct_answer(id):
     return Answer.query.filter_by(question_id=id, is_correct=True).first()
 

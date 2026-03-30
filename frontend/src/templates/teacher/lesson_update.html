@@ -1,0 +1,31 @@
+{%extends 'layout/base.html'%}
+{%block content%}
+<form action="/update_lesson/{{lesson.id}}" enctype="multipart/form-data" method="post">
+    <div class="mt-4 d-flex justify-content-between">
+        <div></div>
+        <a class="btn btn-primary" href="/question_manage/{{lesson.id}}">Câu hỏi</a>
+    </div>
+    <div class="mb-3 mt-3">
+        Tên bài học: <input class="form-control" name="lesson_name" value="{{lesson.title}}">
+    </div>
+    <div>
+        <label for="content">Mô tả:</label>
+        <textarea class="form-control" id="content" name="lesson_text" rows="5">{{lesson.content}}</textarea>
+    </div>
+    <div class="mt-2">
+        {% if lesson.video_url %}
+        <div class="alert alert-success">{{ lesson.video_url.split('/')[-1] }}</div>
+        <div class="form-check">
+            <input class="form-check-input" name="delete_video" type="checkbox" value="1">
+            <label class="form-check-label">Xóa video hiện tại</label>
+        </div>
+        {% else %}
+        <div class="text-muted">Chưa có video</div>
+        {% endif %}
+        <input name="ten_file" type="file">
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-success" type="submit">Cập nhật</button>
+    </div>
+</form>
+{%endblock%}

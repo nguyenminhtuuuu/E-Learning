@@ -1,3 +1,6 @@
+{% set base_url = '/teacher' if current_user.is_authenticated and current_user.role.name == 'TEACHER'
+                  else '/' %}
+
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="javascript:void(0)">E-LEARNING WEBSITE</a>
@@ -7,11 +10,11 @@
         <div class="collapse navbar-collapse" id="mynavbar">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.path == '/' and not request.args.get('capDo_id') }} }}" href="/">Trang chủ</a>
+                    <a class="nav-link {{ 'active' if request.path == '/' and not request.args.get('capDo_id') }}" href="/">Trang chủ</a>
                 </li>
                 {%for c in capdo%}
                 <li class="nav-item">
-                    <a class="nav-link {{ 'active' if request.args.get('capDo_id')|int == c.id }}" href="/?capDo_id={{c.id}}">{{c.name}}</a>
+                    <a class="nav-link {{ 'active' if request.args.get('capDo_id')|int == c.id }}" href="{{base_url}}?capDo_id={{c.id}}">{{c.name}}</a>
                 </li>
                 {%endfor%}
 
@@ -61,7 +64,7 @@
 
                 {% endif %}
             </ul>
-            <form class="d-flex" action="/" method="get">
+            <form class="d-flex" action="{{ base_url }}" method="get">
                 <input class="form-control me-2" type="text" placeholder="Tìm khóa học..." name="q">
                 <button class="btn btn-primary" type="submit">Tìm</button>
             </form>

@@ -1,4 +1,6 @@
 import hashlib
+
+from flask import url_for
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.menu import MenuLink

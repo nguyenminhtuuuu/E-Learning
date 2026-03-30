@@ -48,6 +48,7 @@ class Khoahoc(Base):
     enrollments = relationship('Enrollment', backref='khoahoc_enroll', lazy=True, cascade="all, delete-orphan")
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     user = relationship('User', backref='khoahoc_user', lazy=True)
+    progresses = db.relationship('Progress', backref='khoahoc_progress', cascade='all, delete-orphan')
 
 class Lesson(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -56,6 +57,7 @@ class Lesson(db.Model):
     video_url = Column(String(300))
     khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
     questions = db.relationship('Question',backref='lesson',cascade='all, delete-orphan')
+    progresses = db.relationship('Progress',backref='lesson_progress',cascade='all, delete-orphan')
 
 
 class Question(db.Model):
@@ -78,7 +80,6 @@ class Progress(db.Model):
     khoahoc_id = Column(Integer, ForeignKey(Khoahoc.id), nullable=False)
 
     lesson_id = Column(Integer, ForeignKey(Lesson.id), nullable=True)
-
     is_completed = Column(Boolean, default=False)
     score = Column(Float, nullable=True)
     date = Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())

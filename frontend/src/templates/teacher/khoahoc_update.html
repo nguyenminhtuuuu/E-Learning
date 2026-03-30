@@ -1,0 +1,30 @@
+{%extends 'layout/base.html'%}
+{%block content%}
+
+<form action="/update_khoahoc/{{k.id}}" enctype="multipart/form-data" method="post">
+    <div class="mb-3 mt-3">
+        Tên khóa học: <input class="form-control" name="khoahoc_name" value="{{k.name}}">
+    </div>
+    <div class="mt-2"> Cấp độ:
+        <select class="form-select" name="capdo_id">
+            {%for c in capdo%}
+            <option value="{{c.id}}" {% if c.id == k.capDo_id %} selected {% endif %}> {{c.name}} </option>
+            {%endfor%}
+        </select>
+    </div>
+    <div mb-3 mt-3>
+        Học phí:   <input class="form-control" name="khoahoc_hp" value="{{k.hocPhi}}">
+    </div>
+    <div>
+        <label for="comment">Mô tả:</label>
+        <textarea class="form-control" name="khoahoc_text" id="comment" rows="5">{{k.description}}</textarea>
+    </div>
+    <div class="mt-2">
+        <img src="{{k.image}}" width="150">
+        <input name="ten_file" type="file">
+    </div>
+    <div class="mt-4">
+         <button class="btn btn-success" type="submit" >Cập nhật</button>
+    </div>
+</form>
+{%endblock%}
