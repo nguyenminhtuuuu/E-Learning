@@ -14,22 +14,50 @@ Xây dựng một nền tảng học tập trực tuyến cho phép người dù
 - Message Queue: 
 - Container: Docker + Docker Compose
 ## Kiến trúc
-[Mô tả kiến trúc đã chọn]
-![Architecture](docs/architecture/c4-container.png)
+**Kiến trúc phân tầng (Layered Architecture)** + **Message Broker**
+* **Tầng Giao diện (Presentation Layer):** Sử dụng các templates HTML/Jinja2 được render trực tiếp từ Flask.
+* **Tầng Điều khiển (Controller Layer):** Flask Routes (`index.py`, `admin.py`) xử lý các request từ người dùng.
+* **Tầng Dữ liệu (Data Access Layer):** Tách biệt logic truy xuất cơ sở dữ liệu thông qua `dao.py` và SQLAlchemy ORM (`models.py`).
+* **Xử lý bất đồng bộ:** Tích hợp **RabbitMQ** để hỗ trợ hàng đợi tin nhắn (Message Queue).
 ## Cài đặt và chạy
+Dự án đã được đóng gói hoàn toàn bằng Docker, giúp việc triển khai trở nên đồng nhất và nhanh chóng.
 ### Yêu cầu
 - Docker Desktop
 - Git
 ### Chạy với Docker Compose
-git clone https://github.com/username/project-name
-cd project-name
-docker-compose up -d
+- git clone [https://github.com/nguyenminhtuuuu/E-Learning.git](https://github.com/nguyenminhtuuuu/E-Learning.git)
+- cd project-name
+- docker-compose up -d
+
+**Tạo database (lần đầu chạy)**
+- docker exec -it elearning_backend python backend/src/models.py
 ### Truy cập
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
+- E-Learning Web App: http://localhost:5000
 - RabbitMQ Management: http://localhost:15672
+
+### Chạy UnitTest
+- docker exec -it elearning_backend pytest backend/tests/
 ## Demo
-[Link video demo hoặc screenshots]
+**1. Trang chủ**
+![Trang chủ](demo/trangchu.png)
+
+**2. Màn hình Đăng nhập**
+![Đăng nhập](demo/login.png)
+
+**3. Danh sách Khóa học**
+![Khóa học](demo/khoahoc.png)
+
+**4. Chi tiết Bài học**
+![Bài học](demo/baihoc.png)
+
+**5. Làm Quiz / Bài tập**
+![Quiz](demo/quiz.png)
+
+**6. Giao diện Giảng viên**
+![Giáo viên](demo/giaovien.png)
+
+**7. Quản trị viên (Admin)**
+![Admin](demo/admin.png)
 ## Tài liệu
 - [ADRs](docs/adrs/)
 - [API Documentation](docs/api/)
