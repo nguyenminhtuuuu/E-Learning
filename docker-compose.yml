@@ -1,0 +1,56 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: elearning_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eldb
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - elearning_network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: elearning_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - elearning_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: elearning_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=backend.src.index
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - RABBITMQ_HOST=rabbitmq
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+      - rabbitmq
+    working_dir: /app
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - ./database:/app/database
+    networks:
+      - elearning_network
+
+volumes:
+  db_data:
+
+networks:
+  elearning_network:
+    driver: bridge

@@ -39,7 +39,8 @@ def create_app():
 
     # 4. Cấu hình các thông số
     app.secret_key = "dshfuidsfjdshfjdh"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:root@localhost/eldb?charset=utf8mb4"
+    db_host = os.environ.get("DB_HOST", "localhost")
+    app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://root:root@{db_host}/eldb?charset=utf8mb4"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     app.config["PAGE_SIZE"] = 8
 

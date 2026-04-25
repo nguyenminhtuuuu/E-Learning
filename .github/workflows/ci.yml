@@ -1,0 +1,24 @@
+name: E-Learning CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout code
+      uses: actions/checkout@v3
+
+    - name: 2. Khởi chạy toàn bộ hệ thống Docker
+      run: docker-compose up -d --build
+
+    - name: 3. Chờ MySQL và RabbitMQ khởi động
+      run: sleep 20
+
+    - name: 4. Chạy Unit Test (Pytest)
+      run: docker exec elearning_backend pytest backend/tests/
