@@ -9,9 +9,9 @@ Xây dựng một nền tảng học tập trực tuyến cho phép người dù
 | 2351010141 | Giang Nhật Nguyên | Thành viên |
 ## Công nghệ sử dụng
 - Backend: Python
-- Frontend: HTML, CSS
+- Frontend: HTML
 - Database: MySQL
-- Message Queue: 
+- Message Queue: Rabbit MQ
 - Container: Docker + Docker Compose
 ## Kiến trúc
 **Kiến trúc phân tầng (Layered Architecture)** + **Message Broker**
