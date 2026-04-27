@@ -1,6 +1,8 @@
+import hashlib
+
 from backend.src.models import User, Khoahoc, Lesson, Progress, Capdo, UserEnum
 from backend.src import db
-from backend.src.dao import update_user_progress
+from backend.src.dao import auth_user, update_user_progress
 
 
 def test_update_lesson_progress_success(app):
@@ -56,3 +58,39 @@ def test_update_lesson_progress_success(app):
         assert updated_progress is not None
         assert updated_progress.is_completed is True
         assert updated_progress.score == 8.5
+
+
+def test_auth_user_returns_user_with_valid_credentials(app):
+    with app.app_context():
+        user = User(
+            name="Teacher Test",
+            username="teacher_test",
+            password=hashlib.md5("123456".encode("utf-8")).hexdigest(),
+            email="teacher@test.com",
+            role=UserEnum.TEACHER
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        authenticated_user = auth_user("teacher_test", "123456")
+
+        assert authenticated_user is not None
+        assert authenticated_user.id == user.id
+        assert authenticated_user.username == "teacher_test"
+
+
+def test_auth_user_returns_none_with_invalid_password(app):
+    with app.app_context():
+        user = User(
+            name="Student Test",
+            username="student_test",
+            password=hashlib.md5("correct-password".encode("utf-8")).hexdigest(),
+            email="student@test.com",
+            role=UserEnum.USER
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        authenticated_user = auth_user("student_test", "wrong-password")
+
+        assert authenticated_user is None

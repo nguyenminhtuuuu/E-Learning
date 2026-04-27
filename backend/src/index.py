@@ -6,6 +6,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 import cloudinary.uploader
 from backend.src import dao, db, login, app, admin
 from backend.src.models import Enrollment, Question, Khoahoc, Lesson, Answer
+from backend.src.services.quiz_event_service import (
+    mark_quiz_passed_and_publish,
+)
 
 
 @app.route('/')
@@ -191,8 +194,12 @@ def quiz(khoahoc_id=None, lesson_id=None):
         result_score = (score / total) * 10 if total > 0 else 0
 
         if result_score >= 5:
-            dao.update_user_progress(user_id=current_user.id, khoahoc_id=khoahoc_id, lesson_id=lesson_id,
-                                     score=result_score)
+            mark_quiz_passed_and_publish(
+                user_id=current_user.id,
+                course_id=khoahoc_id,
+                lesson_id=lesson_id,
+                score=result_score
+            )
 
     return render_template('quiz.html', questions=questions, result_score=result_score, score=score, total=total,
                            show_results=show_results, user_answer_id=user_answer_id, khoahoc_id=khoahoc_id,
@@ -269,6 +276,7 @@ def khoahoc_manage():
 
 
 @app.route('/delete_khoahoc/<int:khoahoc_id>', methods=['POST'])
+@login_required
 def khoahoc_delete(khoahoc_id):
     khoahoc = db.session.get(Khoahoc, khoahoc_id)
 
@@ -285,11 +293,13 @@ def khoahoc_delete(khoahoc_id):
 
 
 @app.route('/khoahoc_add')
+@login_required
 def khoahoc_add():
     return render_template('teacher/khoahoc_add.html')
 
 
 @app.route('/add_khoahoc', methods=['POST'])
+@login_required
 def add_khoahoc():
     khoahoc_name = request.form['khoahoc_name']
     capdo_id = request.form['capdo_id']
@@ -317,12 +327,14 @@ def add_khoahoc():
 
 
 @app.route('/khoahoc_update/<int:khoahoc_id>')
+@login_required
 def khoahoc_update(khoahoc_id):
     k = dao.get_khoahoc_by_id(khoahoc_id)
     return render_template('teacher/khoahoc_update.html', k=k)
 
 
 @app.route('/update_khoahoc/<int:khoahoc_id>', methods=['POST'])
+@login_required
 def update_khoahoc(khoahoc_id):
     k = Khoahoc.query.get(khoahoc_id)
     k.name = request.form['khoahoc_name']
@@ -341,6 +353,7 @@ def update_khoahoc(khoahoc_id):
 
 # Quan ly lesson
 @app.route('/delete_lesson/<int:lesson_id>', methods=['POST'])
+@login_required
 def lesson_delete(lesson_id):
     lesson = db.session.get(Lesson, lesson_id)
 
@@ -357,12 +370,14 @@ def lesson_delete(lesson_id):
 
 
 @app.route('/lesson_add/<int:khoahoc_id>')
+@login_required
 def lesson_add(khoahoc_id):
     k = dao.get_khoahoc_by_id(khoahoc_id)
     return render_template('teacher/lesson_add.html', k=k)
 
 
 @app.route('/add_lesson/<int:khoahoc_id>', methods=['POST'])
+@login_required
 def add_lesson(khoahoc_id):
     lesson_name = request.form['lesson_name']
     lesson_text = request.form['lesson_text']
@@ -389,12 +404,14 @@ def add_lesson(khoahoc_id):
 
 
 @app.route('/lesson_update/<int:lesson_id>')
+@login_required
 def lesson_update(lesson_id):
     lesson = dao.get_lesson_by_id(lesson_id)
     return render_template('teacher/lesson_update.html', lesson=lesson)
 
 
 @app.route('/update_lesson/<int:lesson_id>', methods=['POST'])
+@login_required
 def update_lesson(lesson_id):
     lesson = Lesson.query.get(lesson_id)
     lesson.title = request.form['lesson_name']

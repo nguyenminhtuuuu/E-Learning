@@ -43,6 +43,14 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = f"mysql+pymysql://root:root@{db_host}/eldb?charset=utf8mb4"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     app.config["PAGE_SIZE"] = 8
+    app.config["RABBITMQ_HOST"] = os.environ.get("RABBITMQ_HOST", "localhost")
+    app.config["RABBITMQ_PORT"] = int(os.environ.get("RABBITMQ_PORT", "5672"))
+    app.config["RABBITMQ_USER"] = os.environ.get("RABBITMQ_USER", "guest")
+    app.config["RABBITMQ_PASS"] = os.environ.get("RABBITMQ_PASS", "guest")
+    app.config["RABBITMQ_QUEUE_QUIZ_PASSED"] = os.environ.get(
+        "RABBITMQ_QUEUE_QUIZ_PASSED",
+        "quiz_passed"
+    )
 
     # 5. Cấu hình Cloudinary
     cloudinary.config(

@@ -35,6 +35,14 @@ Dự án đã được đóng gói hoàn toàn bằng Docker, giúp việc tri�
 - E-Learning Web App: http://localhost:5000
 - RabbitMQ Management: http://localhost:15672
 
+### Xác minh RabbitMQ hoạt động
+- Theo dõi worker: docker compose logs -f worker
+**Khi có sự kiện, sẽ xuất hiện log:**
+  - Event received từ RabbitMQ
+  - Worker xử lý message
+- Ngoài ra có thể kiểm tra trực tiếp tại:
+  http://localhost:15672 (RabbitMQ UI)
+
 ### Chạy UnitTest
 - docker exec -it elearning_backend pytest backend/tests/
 ## Demo

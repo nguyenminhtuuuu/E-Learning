@@ -1,12 +1,12 @@
-from python:3.10-slim
+FROM python:3.10-slim
 
-workdir /app
+WORKDIR /app
 
-copy requirements.txt .
-run pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-copy . /app/backend
+COPY . /app/backend
 
-expose 5000
+EXPOSE 5000
 
-cmd ["flask", "run", "--host=0.0.0.0"]
+CMD ["flask", "run", "--host=0.0.0.0"]

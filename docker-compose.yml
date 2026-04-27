@@ -21,6 +21,8 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - elearning_network
 
@@ -36,6 +38,36 @@ services:
       - FLASK_ENV=development
       - DB_HOST=db
       - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
+      - RABBITMQ_QUEUE_QUIZ_PASSED=quiz_passed
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+      - rabbitmq
+    working_dir: /app
+    volumes:
+      - ./backend:/app/backend
+      - ./frontend:/app/frontend
+      - ./database:/app/database
+    networks:
+      - elearning_network
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: elearning_worker
+    command: python /app/backend/worker.py
+    environment:
+      - DB_HOST=db
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
+      - RABBITMQ_USER=guest
+      - RABBITMQ_PASS=guest
+      - RABBITMQ_QUEUE_QUIZ_PASSED=quiz_passed
+      - PYTHONUNBUFFERED=1
       - PYTHONPATH=/app
     depends_on:
       - db
@@ -50,6 +82,7 @@ services:
 
 volumes:
   db_data:
+  rabbitmq_data:
 
 networks:
   elearning_network:

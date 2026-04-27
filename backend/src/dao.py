@@ -116,6 +116,21 @@ def update_user_progress(user_id, khoahoc_id, lesson_id = None, score = None):
 
     db.session.commit()
 
+
+def is_course_completed(user_id, khoahoc_id):
+    total_lessons = Lesson.query.filter_by(khoahoc_id=khoahoc_id).count()
+    total_required = total_lessons + 1
+    completed_items = Progress.query.filter_by(
+        user_id=user_id,
+        khoahoc_id=khoahoc_id,
+        is_completed=True
+    ).count()
+
+    if total_required <= 0:
+        return False
+
+    return completed_items >= total_required
+
 def get_user_progress(user_id, khoahoc_id = None, score=None):
     user_enrolls = Enrollment.query.filter_by(user_id=user_id).all()
     progress = []
