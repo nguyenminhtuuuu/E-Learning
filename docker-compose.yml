@@ -23,6 +23,11 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - elearning_network
 
@@ -72,6 +77,7 @@ services:
     depends_on:
       - db
       - rabbitmq
+    restart: on-failure
     working_dir: /app
     volumes:
       - ./backend:/app/backend
