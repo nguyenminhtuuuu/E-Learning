@@ -49,11 +49,12 @@ services:
       - RABBITMQ_QUEUE_QUIZ_PASSED=quiz_passed
       - PYTHONPATH=/app
     depends_on:
-      - db
-      - rabbitmq
+      db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
     working_dir: /app
     volumes:
-      - ./backend:/app/backend
       - ./frontend:/app/frontend
       - ./database:/app/database
     networks:
